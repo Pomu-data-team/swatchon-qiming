@@ -11,7 +11,7 @@ from crawl4ai import (
 )
 
 from models.fabrics import FabricLinks
-from utils.data_utils import is_complete_venue, is_duplicate_venue
+from utils.data_utils import is_complete_fabric, is_duplicate_fabric
 
 
 def get_browser_config() -> BrowserConfig:
@@ -97,7 +97,7 @@ async def fetch_and_process_page(
     seen_names: Set[str],
 ) -> Tuple[List[dict], bool]:
     """
-    Fetches and processes a single page of venue data.
+    Fetches and processes a single page of fabric data.
 
     Args:
         crawler (AsyncWebCrawler): The web crawler instance.
@@ -106,12 +106,12 @@ async def fetch_and_process_page(
         css_selector (str): The CSS selector to target the content.
         llm_strategy (LLMExtractionStrategy): The LLM extraction strategy.
         session_id (str): The session identifier.
-        required_keys (List[str]): List of required keys in the venue data.
-        seen_names (Set[str]): Set of venue names that have already been seen.
+        required_keys (List[str]): List of required keys in the fabric data.
+        seen_names (Set[str]): Set of fabric names that have already been seen.
 
     Returns:
         Tuple[List[dict], bool]:
-            - List[dict]: A list of processed venues from the page.
+            - List[dict]: A list of processed fabrics from the page.
             - bool: A flag indicating if the "No Results Found" message was encountered.
     """
     url = f"{base_url}?page={page_number}"
@@ -132,6 +132,8 @@ async def fetch_and_process_page(
             session_id=session_id,  # Unique session ID for the crawl
         ),
     )
+    print("CLEANED HTML (after CSS selector):")
+    print(result.cleaned_html[:1000])  # print only first 1000 characters to avoid overflow
 
     if not (result.success and result.extracted_content):
         print(f"Error fetching page {page_number}: {result.error_message}")
@@ -146,30 +148,30 @@ async def fetch_and_process_page(
     # After parsing extracted content
     print("Extracted data:", extracted_data)
 
-    # Process venues
-    complete_venues = []
-    for venue in extracted_data:
-        # Debugging: Print each venue to understand its structure
-        print("Processing venue:", venue)
+    # Process fabrics
+    complete_fabrics = []
+    for fabric in extracted_data:
+        # Debugging: Print each fabric to understand its structure
+        print("Processing fabric:", fabric)
 
         # Ignore the 'error' key if it's False
-        if venue.get("error") is False:
-            venue.pop("error", None)  # Remove the 'error' key if it's False
+        if fabric.get("error") is False:
+            fabric.pop("error", None)  # Remove the 'error' key if it's False
 
-        if not is_complete_venue(venue, required_keys):
-            continue  # Skip incomplete venues
+        if not is_complete_fabric(fabric, required_keys):
+            continue  # Skip incomplete fabrics
 
-        if is_duplicate_venue(venue["name"], seen_names):
-            print(f"Duplicate venue '{venue['name']}' found. Skipping.")
-            continue  # Skip duplicate venues
+        if is_duplicate_fabric(fabric["name"], seen_names):
+            print(f"Duplicate fabrics '{fabric['name']}' found. Skipping.")
+            continue  # Skip duplicate fabrics
 
-        # Add venue to the list
-        seen_names.add(venue["name"])
-        complete_venues.append(venue)
+        # Add fabric to the list
+        seen_names.add(fabric["name"])
+        complete_fabrics.append(fabric)
 
-    if not complete_venues:
-        print(f"No complete venues found on page {page_number}.")
+    if not complete_fabrics:
+        print(f"No complete fabrics found on page {page_number}.")
         return [], False
 
-    print(f"Extracted {len(complete_venues)} venues from page {page_number}.")
-    return complete_venues, False  # Continue crawling
+    print(f"Extracted {len(complete_fabrics)} fabric from page {page_number}.")
+    return complete_fabrics, False  # Continue crawling

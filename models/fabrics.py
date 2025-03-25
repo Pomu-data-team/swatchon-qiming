@@ -35,5 +35,5 @@ class FabricLinks(BaseModel):
     """
 
     name: str
-    link: str
+    url: str
 

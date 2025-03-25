@@ -3,11 +3,11 @@ import csv
 from models.fabrics import FabricLinks
 
 
-def is_duplicate_venue(fabric_name: str, seen_names: set) -> bool:
+def is_duplicate_fabric(fabric_name: str, seen_names: set) -> bool:
     return fabric_name in seen_names
 
 
-def is_complete_venue(venue: dict, required_keys: list) -> bool:
+def is_complete_fabric(venue: dict, required_keys: list) -> bool:
     return all(key in venue for key in required_keys)
 
 
