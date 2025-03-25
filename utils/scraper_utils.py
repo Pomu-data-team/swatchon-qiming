@@ -10,7 +10,7 @@ from crawl4ai import (
     LLMExtractionStrategy,
 )
 
-from models.venue import Venue
+from models.fabrics import FabricLinks
 from utils.data_utils import is_complete_venue, is_duplicate_venue
 
 
@@ -40,12 +40,10 @@ def get_llm_strategy() -> LLMExtractionStrategy:
     return LLMExtractionStrategy(
         provider="groq/deepseek-r1-distill-llama-70b",  # Name of the LLM provider
         api_token=os.getenv("GROQ_API_KEY"),  # API token for authentication
-        schema=Venue.model_json_schema(),  # JSON schema of the data model
+        schema=FabricLinks.model_json_schema(),  # JSON schema of the data model
         extraction_type="schema",  # Type of extraction to perform
         instruction=(
-            "Extract all venue objects with 'name', 'location', 'price', 'capacity', "
-            "'rating', 'reviews', and a 1 sentence description of the venue from the "
-            "following content."
+            "Extract all fabric objects with 'name', 'url'"
         ),  # Instructions for the LLM
         input_format="markdown",  # Format of the input content
         verbose=True,  # Enable verbose logging
@@ -142,7 +140,7 @@ async def fetch_and_process_page(
     # Parse extracted content
     extracted_data = json.loads(result.extracted_content)
     if not extracted_data:
-        print(f"No venues found on page {page_number}.")
+        print(f"No fabrics found on page {page_number}.")
         return [], False
 
     # After parsing extracted content

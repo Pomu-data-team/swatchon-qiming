@@ -1,6 +1,6 @@
 # Deep Seek Crawler
 
-This project is a web crawler built with Python that extracts venue data (wedding reception venues) from a website using asynchronous programming with Crawl4AI. It utilizes a language model-based extraction strategy and saves the collected data to a CSV file.
+This project is modified through this[https://www.youtube.com/watch?v=Osl4NgAXvRk&ab_channel=aiwithbrandon] tutorial but with fabric data from swatchon[https://swatchon.com/wholesale-fabric?from=/wholesale-fabric/Viscose+rayon-Nylon-Linen-Spandex-Plain-Plain-Piece+dye-46284]
 
 ## Features
 
@@ -8,14 +8,16 @@ This project is a web crawler built with Python that extracts venue data (weddin
 - Data extraction powered by a language model (LLM)
 - CSV export of extracted venue information
 - Modular and easy-to-follow code structure ideal for beginners
+- page navigation with playright: visting 190-388 pages of fabircs, clicking to visit each fabric page to collect text and image data. Then store the data to database.
 
 ## Project Structure
+
 ```
 .
 ├── main.py # Main entry point for the crawler
 ├── config.py # Contains configuration constants (Base URL, CSS selectors, etc.)
 ├── models
-│ └── venue.py # Defines the Venue data model using Pydantic
+│ └── fabric.py # Defines the Venue data model using Pydantic
 ├── utils
 │ ├── init.py # (Empty) Package marker for utils
 │ ├── data_utils.py # Utility functions for processing and saving data
@@ -30,8 +32,8 @@ This project is a web crawler built with Python that extracts venue data (weddin
 1. **Create and Activate a Conda Environment**
 
    ```bash
-   conda create -n deep-seek-crawler python=3.12 -y
-   conda activate deep-seek-crawler
+   conda create -n swatchon-crawler python=3.12 -y
+   conda activate swatchon-crawler
    ```
 
 2. **Install Dependencies**
@@ -48,7 +50,7 @@ This project is a web crawler built with Python that extracts venue data (weddin
    GROQ_API_KEY=your_groq_api_key_here
    ```
 
-   *(Note: The `.env` file is in your .gitignore, so it won’t be pushed to version control.)*
+   _(Note: The `.env` file is in your .gitignore, so it won’t be pushed to version control.)_
 
 ## Usage
 
@@ -75,6 +77,24 @@ You can modify these values as needed.
 - **Logging:** The project currently uses print statements for status messages. For production or further development, consider integrating Python’s built-in `logging` module.
 - **Improvements:** The code is structured in multiple modules to maintain separation of concerns, making it easier for beginners to follow and extend the functionality.
 - **Dependencies:** Ensure that the package versions specified in `requirements.txt` are installed to avoid compatibility issues.
+
+## Data strategies
+
+### Getting each fabric link at first
+
+### NOT storing any link visit the page directly
+
+## Error and fix
+
+### playwright chromium instance not in the location:
+
+`conda activate swatchon-crawler`
+
+clean the cache
+`rm -rf ~/Library/Caches/ms-playwright`
+
+install again
+`playwright install`
 
 ## License
 
